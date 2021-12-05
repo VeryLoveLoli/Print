@@ -230,6 +230,36 @@ open class Print {
         
         level(.error, value: value, separator: separator, terminator: terminator, file: file, funcName: funcName, line: line)
     }
+    
+    /**
+     保留日志
+     
+     - parameter    day:    最近几天（`0`即删除所有）
+     */
+    static func keepLog(_ day: Int) {
+        
+        let date = Date(timeIntervalSince1970: Date().timeIntervalSince1970 - TimeInterval(day)*24*60*60)
+        
+        let string = format(date, string: "yyyy-MM-dd") + ".log"
+        
+        if let array = FileManager.default.subpaths(atPath: path) {
+            
+            for item in array {
+                
+                if item.contains(".log") && item <= string {
+                    
+                    do {
+                        
+                        try FileManager.default.removeItem(atPath: path + item)
+                        
+                    } catch {
+                        
+                        Print.error(error.localizedDescription)
+                    }
+                }
+            }
+        }
+    }
 }
 
 // MARK: - 输出源码
