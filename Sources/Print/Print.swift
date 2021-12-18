@@ -68,10 +68,14 @@ open class Print {
     
     /// 等级
     public static var level: Print.Level = .debug
-    /// 是否显示输出文件/函数/行号
-    public static var isFileFunctionLine = false
     /// 是否显示输出时间
     public static var isTime = false
+    /// 是否显示输出文件
+    public static var isFile = false
+    /// 是否显示输出函数
+    public static var isFunction = false
+    /// 是否显示输出行号
+    public static var isLine = false
     /// 日志路径
     public static var path = NSHomeDirectory() + "/Documents/Print/"
     /// 队列
@@ -143,9 +147,19 @@ open class Print {
                     list.append(format(Date(), string: "yyyy-MM-dd HH:mm:ss.SSS"))
                 }
                 
-                if isFileFunctionLine {
+                if isFile {
                     
-                    list.append("\(file.components(separatedBy: "/").last ?? file) \(funcName) line: \(line)")
+                    list.append("\(file.components(separatedBy: "/").last ?? file)")
+                }
+                
+                if isFunction {
+                    
+                    list.append("\(funcName)")
+                }
+                
+                if isLine {
+                    
+                    list.append("line: \(line)")
                 }
                 
                 let string = list.joined(separator: separator)
@@ -236,7 +250,7 @@ open class Print {
      
      - parameter    day:    最近几天（`0`即删除所有）
      */
-    static func keepLog(_ day: Int) {
+    public static func keepLog(_ day: Int) {
         
         let date = Date(timeIntervalSince1970: Date().timeIntervalSince1970 - TimeInterval(day)*24*60*60)
         
